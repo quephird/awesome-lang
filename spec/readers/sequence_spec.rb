@@ -2,6 +2,7 @@ require_relative '../../readers/constant'
 require_relative '../../readers/identifier'
 require_relative '../../readers/number'
 require_relative '../../readers/space'
+require_relative '../../readers/string'
 require_relative '../../readers/sequence'
 
 describe Readers::Sequence do
@@ -9,12 +10,14 @@ describe Readers::Sequence do
   let(:identifier_reader) { Readers::Identifier.new }
   let(:number_reader) { Readers::Number.new }
   let(:space_reader) { Readers::Space.new }
+  let(:string_reader) { Readers::String.new }
   let(:sequence_reader) do
      Readers::Sequence.new [
        constant_reader,
        identifier_reader,
        number_reader,
-       space_reader
+       space_reader,
+       string_reader
      ]
    end
   let(:initial_results) do
@@ -54,6 +57,14 @@ describe Readers::Sequence do
     it 'should properly parse the number' do
       results = sequence_reader.read("42\nend", initial_results)
       expect(results[:tokens]).to eq [[:NUMBER, 42]]
+      expect(results[:remaining_code]).to eq "\nend"
+    end
+  end
+
+  context 'input string begins with a string literal' do
+    it 'should properly parse the string' do
+      results = sequence_reader.read("\"a string\"\nend", initial_results)
+      expect(results[:tokens]).to eq [[:STRING, 'a string']]
       expect(results[:remaining_code]).to eq "\nend"
     end
   end
