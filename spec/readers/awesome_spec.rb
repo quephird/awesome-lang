@@ -2,6 +2,7 @@ require_relative '../../readers/begin_block'
 require_relative '../../readers/constant'
 require_relative '../../readers/identifier'
 require_relative '../../readers/number'
+require_relative '../../readers/operator'
 require_relative '../../readers/space'
 require_relative '../../readers/string'
 require_relative '../../readers/sequence'
@@ -12,6 +13,7 @@ describe Readers::Awesome do
   let(:constant_reader) { Readers::Constant.new }
   let(:identifier_reader) { Readers::Identifier.new }
   let(:number_reader) { Readers::Number.new }
+  let(:operator_reader) { Readers::Operator.new }
   let(:space_reader) { Readers::Space.new }
   let(:string_reader) { Readers::String.new }
   let(:sequence_reader) do
@@ -20,6 +22,7 @@ describe Readers::Awesome do
        constant_reader,
        identifier_reader,
        number_reader,
+       operator_reader,
        space_reader,
        string_reader
      ]
@@ -28,7 +31,7 @@ describe Readers::Awesome do
 
   context 'input string contains a class definition' do
     it 'should properly parse the code' do
-      input_code = "class Foo:\n  def foo:\n    42    \"foo\""
+      input_code = "class Foo:\n  def foo:\n    bar == 42    \"foo\""
       results = awesome_reader.read(input_code)
       expect(results[:tokens]).to eq [
         [:CLASS, 'class'],
@@ -37,6 +40,8 @@ describe Readers::Awesome do
         [:DEF, 'def'],
         [:IDENTIFIER, 'foo'],
         [:INDENT, 4],
+        [:IDENTIFIER, 'bar'],
+        ['==', '=='],
         [:NUMBER, 42],
         [:STRING, 'foo']
       ]
