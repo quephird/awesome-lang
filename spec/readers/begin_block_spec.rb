@@ -15,6 +15,8 @@ describe Readers::BeginBlock do
     it 'should properly parse the block beginning' do
       results = begin_block_reader.read(":\n  def foo", initial_results)
       expect(results[:tokens]).to eq [[:INDENT, 2]]
+      expect(results[:current_indent]).to eq 2
+      expect(results[:indent_stack]).to eq [2]
     end
 
     it 'should strip the constant from the beginning of the string' do
