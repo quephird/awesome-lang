@@ -1,3 +1,4 @@
+require_relative '../../readers/begin_block'
 require_relative '../../readers/constant'
 require_relative '../../readers/identifier'
 require_relative '../../readers/number'
@@ -6,6 +7,7 @@ require_relative '../../readers/string'
 require_relative '../../readers/sequence'
 
 describe Readers::Sequence do
+  let(:begin_block_reader) { Readers::BeginBlock.new }
   let(:constant_reader) { Readers::Constant.new }
   let(:identifier_reader) { Readers::Identifier.new }
   let(:number_reader) { Readers::Number.new }
@@ -13,6 +15,7 @@ describe Readers::Sequence do
   let(:string_reader) { Readers::String.new }
   let(:sequence_reader) do
      Readers::Sequence.new [
+       begin_block_reader,
        constant_reader,
        identifier_reader,
        number_reader,
@@ -66,6 +69,16 @@ describe Readers::Sequence do
       results = sequence_reader.read("\"a string\"\nend", initial_results)
       expect(results[:tokens]).to eq [[:STRING, 'a string']]
       expect(results[:remaining_code]).to eq "\nend"
+    end
+  end
+
+  context 'input string begins with a new block' do
+    it 'should properly parse the new block' do
+      results = sequence_reader.read(":\n   def foo", initial_results)
+      expect(results[:tokens]).to eq [[:INDENT, 3]]
+      expect(results[:current_indent]).to eq 3
+      expect(results[:indent_stack]).to eq [3]
+      expect(results[:remaining_code]).to eq "def foo"
     end
   end
 end
