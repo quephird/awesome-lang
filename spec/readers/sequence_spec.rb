@@ -34,25 +34,35 @@ describe Readers::Sequence do
 
   context 'input string begins with a keyword' do
     it 'should properly parse the keyword' do
-      results = sequence_reader.read("def foo\n  42\nend", initial_results)
+      results = sequence_reader.read("def foo:\n  42\nend", initial_results)
       expect(results[:tokens]).to eq [[:DEF, 'def']]
-      expect(results[:remaining_code]).to eq " foo\n  42\nend"
+      expect(results[:remaining_code]).to eq " foo:\n  42\nend"
     end
   end
 
   context 'input string begins with a space' do
     it 'should properly strip the space' do
-      results = sequence_reader.read(" foo\n  42\nend", initial_results)
+      results = sequence_reader.read(" foo:\n  42\nend", initial_results)
       expect(results[:tokens]).to eq []
-      expect(results[:remaining_code]).to eq "foo\n  42\nend"
+      expect(results[:remaining_code]).to eq "foo:\n  42\nend"
     end
   end
 
   context 'input string begins with an identifier' do
     it 'should properly parse the identifier' do
-      results = sequence_reader.read("foo\n  42\nend", initial_results)
+      results = sequence_reader.read("foo:\n  42\nend", initial_results)
       expect(results[:tokens]).to eq [[:IDENTIFIER, 'foo']]
-      expect(results[:remaining_code]).to eq "\n  42\nend"
+      expect(results[:remaining_code]).to eq ":\n  42\nend"
+    end
+  end
+
+  context 'input string begins with a new block' do
+    it 'should properly parse the new block' do
+      results = sequence_reader.read(":\n  42\nend", initial_results)
+      expect(results[:tokens]).to eq [[:INDENT, 2]]
+      expect(results[:current_indent]).to eq 2
+      expect(results[:indent_stack]).to eq [2]
+      expect(results[:remaining_code]).to eq "42\nend"
     end
   end
 
@@ -69,16 +79,6 @@ describe Readers::Sequence do
       results = sequence_reader.read("\"a string\"\nend", initial_results)
       expect(results[:tokens]).to eq [[:STRING, 'a string']]
       expect(results[:remaining_code]).to eq "\nend"
-    end
-  end
-
-  context 'input string begins with a new block' do
-    it 'should properly parse the new block' do
-      results = sequence_reader.read(":\n   def foo", initial_results)
-      expect(results[:tokens]).to eq [[:INDENT, 3]]
-      expect(results[:current_indent]).to eq 3
-      expect(results[:indent_stack]).to eq [3]
-      expect(results[:remaining_code]).to eq "def foo"
     end
   end
 end
