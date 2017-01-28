@@ -11,7 +11,6 @@ module Readers
         test_results = reader.read(stream, results)
 
         if test_results[:match_found]
-          # # We got a match, stop looping.
           results = test_results
           break
         end
