@@ -18,7 +18,7 @@ module Readers
         test_results = @sequence_reader.read(remaining_code, results)
 
         if !test_results[:match_found]
-          # We didn't get a match; we have a problem.
+          # TODO: Add capturing of line and column numbers.
           raise "Parse error at line #{}, column #{}"
         end
       end
