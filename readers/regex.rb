@@ -1,5 +1,11 @@
 module Readers
   class Regex
+    # This class is used by most of the specialized readers.
+    # The constructor expects to get passed a regex used to
+    # match and capture a pattern at the beginning of the
+    # the stream/string being processed, and a lambda
+    # which is called if a match is found, and modifies then
+    # then returns the initial results structure passed to it.
     def initialize(regex, &match_handler)
       @regex = regex
       @match_handler = match_handler
