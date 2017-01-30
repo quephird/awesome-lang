@@ -2,11 +2,12 @@ require_relative 'sequence'
 
 module Readers
   # This class is initialized with a sequence reader, which
-  # is already set up with list of regex-base readers.
-  # Unlike the sequence reader, it will iterate through _stream/string_
-  # being process, and it will either continue to accumuate matched
-  # in the result structure, or is a match is not found by the
-  # seuence reader throw an error, halting processing.
+  # is already set up with list of regex-based readers.
+  # Unlike the sequence reader, it will iterate through matched chunks
+  # in the input stream/string being processed. It will either
+  # continue to accumulate token name/value pairs in the results
+  # structure, or if a match is not found by the sequence reader
+  # it will throw an error halting processing.
   class Awesome
     def initialize(sequence_reader)
       @sequence_reader = sequence_reader

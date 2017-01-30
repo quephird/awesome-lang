@@ -4,8 +4,10 @@ module Readers
     # The constructor expects to get passed a regex used to
     # match and capture a pattern at the beginning of the
     # the stream/string being processed, and a lambda
-    # which is called if a match is found, and modifies then
-    # then returns the initial results structure passed to it.
+    # which is called if a match is found, which modifies then
+    # returns the initial results structure passed to it. If the
+    # match fails then it returns with the :match_found set to
+    # false.
     def initialize(regex, &match_handler)
       @regex = regex
       @match_handler = match_handler
