@@ -9,6 +9,7 @@ module Readers
   # structure, or if a match is not found by the sequence reader
   # it will throw an error halting processing.
   class Awesome
+    # TODO: The sequence of readers needs to be constructed here
     def initialize(sequence_reader)
       @sequence_reader = sequence_reader
     end
@@ -18,7 +19,7 @@ module Readers
         tokens: [],
         current_indent: 0,
         indent_stack: [],
-        remaining_code: stream
+        remaining_code: stream.chomp!
       }
 
       while !(remaining_code = results[:remaining_code]).empty?

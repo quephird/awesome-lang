@@ -21,7 +21,6 @@ module Readers
         results[:match_found] = true
       else
         results[:match_found] = false
-        results[:remaining_code] = stream
       end
       results
     end

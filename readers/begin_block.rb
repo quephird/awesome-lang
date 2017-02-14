@@ -7,6 +7,7 @@ module Readers
         current_indent = results[:current_indent]
         new_indent = chunk.size
 
+        # TODO: Need tests around this.
         if new_indent <= current_indent
           raise "Bad indent level, got #{new_indent} indents, " +
           "expected > #{current_indent}"
