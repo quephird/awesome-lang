@@ -11,30 +11,7 @@ require_relative '../../readers/sequence'
 require_relative '../../readers/awesome'
 
 describe Readers::Awesome do
-  let(:begin_block_reader) { Readers::BeginBlock.new }
-  let(:constant_reader) { Readers::Constant.new }
-  let(:identifier_reader) { Readers::Identifier.new }
-  let(:indent_reader) { Readers::Indent.new }
-  let(:number_reader) { Readers::Number.new }
-  let(:operator_reader) { Readers::Operator.new }
-  let(:single_character_reader) { Readers::SingleCharacter.new }
-  let(:space_reader) { Readers::Space.new }
-  let(:string_reader) { Readers::String.new }
-  let(:sequence_reader) do
-     Readers::Sequence.new [
-       identifier_reader,
-       constant_reader,
-       number_reader,
-       string_reader,
-       begin_block_reader,
-       indent_reader,
-       operator_reader,
-       space_reader,
-       single_character_reader,
-     ]
-   end
-
-  let(:awesome_reader) { Readers::Awesome.new sequence_reader}
+  let(:awesome_reader) { Readers::Awesome.new }
   let(:example_code) {
     <<~EXAMPLE
       if 1:

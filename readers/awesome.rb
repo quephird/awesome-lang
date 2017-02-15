@@ -1,17 +1,36 @@
 require_relative 'sequence'
 
 module Readers
-  # This class is initialized with a sequence reader, which
-  # is already set up with list of regex-based readers.
+  # This class is initialized composed with a sequence reader,
+  # which is set up with list of regex-based readers.
   # Unlike the sequence reader, it will iterate through matched chunks
   # in the input stream/string being processed. It will either
   # continue to accumulate token name/value pairs in the results
   # structure, or if a match is not found by the sequence reader
   # it will throw an error halting processing.
   class Awesome
-    # TODO: The sequence of readers needs to be constructed here
-    def initialize(sequence_reader)
-      @sequence_reader = sequence_reader
+    def initialize
+      begin_block_reader = Readers::BeginBlock.new
+      constant_reader = Readers::Constant.new
+      identifier_reader = Readers::Identifier.new
+      indent_reader = Readers::Indent.new
+      number_reader = Readers::Number.new
+      operator_reader = Readers::Operator.new
+      single_character_reader = Readers::SingleCharacter.new
+      space_reader = Readers::Space.new
+      string_reader = Readers::String.new
+      @reader = Readers::Sequence.new [
+        identifier_reader,
+        constant_reader,
+        number_reader,
+        string_reader,
+        begin_block_reader,
+        indent_reader,
+        operator_reader,
+        space_reader,
+        single_character_reader,
+      ]
+
     end
 
     def read(stream)
@@ -23,7 +42,7 @@ module Readers
       }
 
       while !(remaining_code = results[:remaining_code]).empty?
-        test_results = @sequence_reader.read(remaining_code, results)
+        test_results = @reader.read(remaining_code, results)
 
         if !test_results[:match_found]
           # TODO: Add capturing of line and column numbers.
