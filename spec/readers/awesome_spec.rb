@@ -1,12 +1,3 @@
-require_relative '../../readers/begin_block'
-require_relative '../../readers/constant'
-require_relative '../../readers/identifier'
-require_relative '../../readers/indent'
-require_relative '../../readers/number'
-require_relative '../../readers/operator'
-require_relative '../../readers/single_character'
-require_relative '../../readers/space'
-require_relative '../../readers/string'
 require_relative '../../readers/sequence'
 require_relative '../../readers/awesome'
 

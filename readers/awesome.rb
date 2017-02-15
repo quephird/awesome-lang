@@ -1,3 +1,12 @@
+require_relative 'begin_block'
+require_relative 'constant'
+require_relative 'identifier'
+require_relative 'indent'
+require_relative 'number'
+require_relative 'operator'
+require_relative 'single_character'
+require_relative 'space'
+require_relative 'string'
 require_relative 'sequence'
 
 module Readers
